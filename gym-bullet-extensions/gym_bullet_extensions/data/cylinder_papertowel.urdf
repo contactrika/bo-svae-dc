@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<robot name="cylinder">
+  <link name="cylinder_base_link">
+    <dynamics damping="1.0" />
+    <contact>
+      <restitution value="0.05"/>
+      <lateral_friction value="0.3"/>
+      <rolling_friction value="0.01"/>
+      <contact_cfm value="0.0"/>
+      <contact_erp value="1.0"/>
+    </contact>
+    <inertial>
+      <mass value="0.150"/>
+      <inertia ixx="0.073958" ixy="0.0" ixz="0.0" iyy="0.073958" iyz="0.0" izz="0.00125"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <cylinder length="0.22" radius="0.05"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+       <material name="pink">
+        <color rgba="0.9 0.9 0.9 0.8"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.22" radius="0.05"/>
+      </geometry>
+    </collision>
+  </link>
+</robot>
