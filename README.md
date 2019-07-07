@@ -86,12 +86,12 @@ tensorboard --logdir=svaedata/ --port=6006
 
 Go to ```http://localhost:6006``` in you browser and you should see TensorBoard: 
 * SCALARS tab will have plots
-* IMAGES tab would have reconstruction and generation videos 
+* IMAGES tab will have reconstruction and generation videos 
 * TEXT tab will have parameters of the training job you launched
 
-They should looks similar to this example image:
+They should looks similar to this example:
 
-TODO: include tensorboard snapshot
+<img src="img/FrankaTorqueTrain2.png" alt="FrankaTorqueTrain2"/>
 
 After some time you should see recon (middle) and gen (right) roughly match the original (left). You can make smoother videos by setting a lower ```--video_steps_interval```, but that will take more CPU time.
 
