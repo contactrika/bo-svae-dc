@@ -144,7 +144,7 @@ def get_args():
     parser.add_argument('--bo_num_trials', type=int, default=20,
                         help='Number of BO trials per run')
     parser.add_argument('--output_prefix', type=str,
-                        default=os.path.expanduser('~/local/botorchdata/'))
+                        default=os.path.expanduser('botorchdata/'))
     # Auxiliary when used in server mode (not used outside main_server())
     parser.add_argument('--port', type=int, default=10000,
                         help='Server TCP Port')

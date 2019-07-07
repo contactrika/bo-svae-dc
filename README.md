@@ -97,28 +97,84 @@ After some time you should see recon (middle) and gen (right) roughly match the 
 
 Note on the training: 'bad frac' does not need to match between orig/recon/gen. As long as recon/gen have higher 'bad frac' that varies in the same direciton as the one printed in orig - that should be enough for BO. 
 
+When training with very little data (as in this this example) you might see warnings. So: collect a proper amount of data (100K+). You also might need to distill your data to throw away redundant trajectories, if your domain is such that the data is heavily skewed. See ``distill_env_epxerience.py``
+
+
 ### Bayesian Optimization (BO):
 
 SVAE-DC training will create checkpoints in directories that look like ```svaedata/output_run0_190707_120729/```. The last two checkpoint will be kept during training. Once you are satisfied with the training, pick a checkpoint and start BO:
 
 ```
-python bo_main.py --gpu=0 --run_id=0 \
+python svae-dc/svae_dc/bo_main.py --gpu=0 --run_id=0 \
  --bo_num_init=2 --bo_num_trials=20 \
  --bo_kernel_type=SVAE-DC-SE \
- --env_name=FrankaTorque-v0 \
- --controller_class=DaisyGait11DPolicy \
+ --env_name=FrankaTorque-v2 \
+ --controller_class=WaypointsMinJerkPolicy \
  --svae_dc_override_good_th=0.35 \
- --svae_dc_checkpt=/svaedata/output_run0_190707_120729/checkpt-70000.pt
+ --svae_dc_checkpt=svaedata/output_run0_190707_125546/checkpt-14000.pt
 ```
 
-```svae_dc_override_good_th``` parameter is not required, but can be useful. To see what a good value would be for your case: look at SVAE-DC training output logs (e.g. ```svaedata/output_run0_190707_120729/log.txt```). You will see printouts like this:
+```svae_dc_override_good_th``` parameter is not required, but can be useful (see notes for more info).
+
+BO training will produce 
+
+<hr />
+
+## Visualize best controllers found by BO.
+
+TODO
+
+<hr />
+<hr />
+<hr />
+
+## Notes
+
+### Installation Notes
+
+The above installation and demo instruction have been tested on Linux Ubuntu 18.04 and OS X 10.14.5 (Mojave). Key version numbers (that pip served at the time we wrote instructions):
+```
+numpy-1.16.4
+scipy==1.3.0
+six==1.12.0
+pybullet-2.5.1
+moviepy==1.0.0
+mpi4py==3.0.2
+torch==1.1.0.post2
+tensorflow==1.14.0
+tensorboard==1.14.0
+tensorboardX==1.8
+gpytorch==0.3.3
+botorch==0.1.1
+```
+
+<hr />
+
+### PyBullet Notes
+
+To make sure numpy is enabled for PyBullet try:
+```
+python
+>import pybullet
+>pybullet.isNumpyEnabled()
+```
+
+If you get 0 as the result of the above then try:
+```
+pip uninstall pybullet
+pip --no-cache-dir install pybullet
+```
+
+If pybullet simulator fails to install on your machine, sometimes it is easier to install it from source. For installation troubleshooting and further information on PyBullet see https://pybullet.org
+
+<hr />
+
+### SVAE-DC Training Notes
+
+We mostly used a default value of 0.8, tested low values like 0.35 as well.
+To see what a good value would be for your case: look at SVAE-DC training output logs (e.g. ```svaedata/output_run0_190707_120729/log.txt```). You will see printouts like this:
 
 ```
-2019-06-27 16:58:58,796 sample_good_bad(): true_rwd
-2019-06-27 16:58:58,796 tensor([[ 0.5199],
-        [ 0.6909],
-        [-0.9277],
-        [-1.8000]])
 2019-06-27 16:58:58,798 true_goodness
 2019-06-27 16:58:58,798 tensor([[1.0000],
         [0.8343],
@@ -140,55 +196,13 @@ python bo_main.py --gpu=0 --run_id=0 \
 2019-06-27 16:58:58,845 raw distance (norm) 0.4701
 ```
 
-This code is from training with ```--good_th=0.35```
-This means that trajectories with goodness>0.35 will be considered acceptable. You can see that in the output snippet: test trajectories 0,1 (bids 0, 1) have high true goodness (1.0, 0.83) and also high goodness according to SVAE-DC (0.677, 0.8109). While test trajectories 2,3 (bids 2,3) have low true goodness (0.0938, 0.2814) and also low goodness according to SVAE-DC: (0.109  0.2792). So, a threshold of e.g. 0.35 is appropriate separation of good-vs-bad trajectories in this case. 
+The above log snippet is from training with ```--good_th=0.35```: trajectories with goodness>0.35 will be considered acceptable. You can see that in the output snippet: test trajectories 0,1 (bids 0, 1) have high true goodness (1.0, 0.83) and also high goodness according to SVAE-DC (0.677, 0.8109). While test trajectories 2,3 (bids 2,3) have low true goodness (0.0938, 0.2814) and also low goodness according to SVAE-DC: (0.109  0.2792). So, a threshold of e.g. 0.35 is appropriate separation of good-vs-bad trajectories in this case. 
 
-In the future we could let uses specify good/bad in a more visual way during data collection. This information can't be extracted from reward, since we don't want to make reward-dependent kernels. Instead the 'goodness' is something about the desirability/stability/safety overall, and that is not strictly task-independent (and it varies depending on the domain and which behaviors are considered acceptable/desirable).
-
+In the future we could let users specify good/bad in a more visual way during data collection. This information can't be extracted from reward, since we don't want to make reward-dependent kernels. Instead the 'goodness' is something about the desirability/stability/safety overall, and that is not strictly task-independent (but it can vary depending on the domain and which behaviors are considered acceptable/desirable).
 
 <hr />
 
-## Visualize best controllers found by BO.
-
-TODO
-
-## Notes
-
-The above installation and demo instruction have been tested on Linux Ubuntu 18.04 and OS X 10.14.5 (Mojave). Key version numbers (that pip served at the time we wrote instructions):
-```
-numpy-1.16.4
-scipy==1.3.0
-six==1.12.0
-pybullet-2.5.1
-moviepy==1.0.0
-mpi4py==3.0.2
-torch==1.1.0.post2
-tensorflow==1.14.0
-tensorboard==1.14.0
-tensorboardX==1.8
-gpytorch==0.3.3
-botorch==0.1.1
-```
-
-
-<hr />
-
-To make sure numpy is enabled for PyBullet try:
-```
-python
->import pybullet
->pybullet.isNumpyEnabled()
-```
-
-If you get 0 as the result of the above then try:
-```
-pip uninstall pybullet
-pip --no-cache-dir install pybullet
-```
-
-If pybullet simulator fails to install on your machine, sometimes it is easier to install it from source. For installation troubleshooting and further information on PyBullet see https://pybullet.org
-
-<hr />
+### BoTorch Notes
 
 BoTorch code from Facebook AI is still experimental and rapidly developing. You will notice comments about it in the code. If you are running on a GPU with a limited memory: reduce the number of internal samples used during BO optimization: see ```svae-dc/svae_dc/utuils/bo_constants.py```
 
