@@ -17,7 +17,7 @@ def get_all_args():
                         help='Batch size')
     parser.add_argument('--debug', type=int, default=0, help='Debug level')
     parser.add_argument('--output_prefix', type=str,
-                        default=os.path.expanduser('~/local/svaedata/'))
+                        default=os.path.expanduser('svaedata/'))
     parser.add_argument('--log_interval', type=int, default=100,
                         help='Log every k train updates (epochs)')
     parser.add_argument('--save_interval', type=int, default=1000,
@@ -29,17 +29,22 @@ def get_all_args():
                         help='Checkpoint to load to continue training')
     parser.add_argument('--svae_dc_hidden_size', type=int, default=64,
                         help='Hidden size for all NNs')
-    parser.add_argument('--svae_dc_tau_size', type=int, default=6,
+    parser.add_argument('--svae_dc_tau_size', type=int, default=7,
                         help='Size of each tau_k (in tau_{1:K})')
     parser.add_argument('--svae_dc_K_tau_scale', type=float, default=0.05,
                         help='How much to shrink K=scale*T (T in xi_{1:T})')
+    # We observed that when learning means and variances jointly, VAEs tend to
+    # find extremely low-variance solutions. We experimented with limiting max
+    # logvar at the early stages of the training (this was also used in prior
+    # work we found as well). This produced ELBO curves that increase more
+    # gradually, but ultimately this does not change the training outcome much.
+    # So we kept the code, but turned off this param by default.
     parser.add_argument('--svae_dc_logvar_patience', type=int, default=None,
-                        help='Number of train updates (epochs)')
+                        help='Number of epochs for logvar increase stages')
     parser.add_argument('--svae_dc_num_data_passes', type=int, default=10000,
                         help='Number of passes over training data')
-    parser.add_argument('--svae_dc_use_laplace', type=int, default=0,
+    parser.add_argument('--svae_dc_use_laplace', type=int, default=1,
                         help='Whether to use Laplace instead of Gaussian')
-    # TODO: clean up and add implementations for MLP, LSTM, RNN as baselines.
     parser.add_argument('--svae_dc_coder_type', type=str, default='conv',
                         choices=['conv'],
                         help='Decoder/Encoder NN type')
@@ -48,6 +53,13 @@ def get_all_args():
                         help='NN type for latent dynamics')
     parser.add_argument('--svae_dc_good_th', type=float, default=0.35,
                         help='Threshold for traj to be considered acceptable')
+    # This parameter could be used to specify custom weighting of gen vs recon
+    # part of ELBO. We did not customize it in our work, and instead used a
+    # default that simply adjusted for the different dimensionality of
+    # original trajectories vs latent paths. Depending on your data you
+    # could find it useful. Though a better alternative would be to equalize
+    # the data using distill_env_experience. It generates balanced data
+    # and can prevent VAE-based optimization from collapsing to the mean.
     parser.add_argument('--svae_dc_gen_beta', type=float, default=None,
                         help='How important to sync with gen/latent part.')
     # Environment-related variables.

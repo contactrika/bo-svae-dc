@@ -3,7 +3,6 @@
 #
 import argparse
 import multiprocessing
-import pickle
 import os
 
 import numpy as np
@@ -23,8 +22,6 @@ def get_args():
                                  'WaypointsPosPolicy', 'WaypointsMinJerkPolicy',
                                  'WaypointsEEPolicy', 'WaypointsVelPolicy'],
                         help='Controller class name')
-    parser.add_argument('--ptraj_pkl_file', type=str, default=None,
-                        help='File with planned trajectories to simulate')
     parser.add_argument('--output_prefix', type=str,
                         default=os.path.expanduser('~/local/experience/'))
     parser.add_argument('--num_procs', type=int, default=8,
@@ -38,49 +35,12 @@ def get_args():
     return args
 
 
-def init_from_moveit_ptraj(policy, ptraj, env):
-    ptraj_r_pos = ptraj[2]  # get qpos
-    ptraj_r_qvel = ptraj[3]  # TODO: remove hack with testing qvels
-    policy.controller.traj[:,:] *= 0  # zero out all velocities
-    tr_st = 0
-    if ptraj_r_qvel is not None:
-        sim_st_per_plan_st = int(policy.controller.traj.shape[0]/len(ptraj_r_qvel))
-        print('policy.controller.traj.shape[0]', policy.controller.traj.shape[0])
-        print('sim_st_per_plan_st', sim_st_per_plan_st)
-        print('len(ptraj_r_vel)', len(ptraj_r_qvel))
-        pl_tr_st = 0
-        while pl_tr_st < len(ptraj_r_qvel):  # override right arm qpos
-            print('pl_tr_st', pl_tr_st)
-            print('ptraj_r_qvel[pl_tr_st]', ptraj_r_qvel[pl_tr_st])
-            for tr_jid in range(len(ptraj_r_qvel[pl_tr_st])):
-                policy.controller.traj[tr_st,tr_jid] = \
-                    ptraj_r_qvel[pl_tr_st][tr_jid]
-            tr_st += 1; pl_tr_st +=1
-            for sub_tr_st in range(sim_st_per_plan_st-1):
-                policy.controller.traj[tr_st,:] = \
-                    policy.controller.traj[tr_st-1,:]
-                tr_st += 1
-    print('final tr_st', tr_st)
-    while tr_st+1<policy.controller.traj.shape[0]:
-        policy.controller.traj[tr_st+1,:] = \
-            policy.controller.traj[tr_st,:]  # use prev qpos
-        tr_st += 1
-    policy.controller.traj[:,-2] = env.robot.kp
-    policy.controller.traj[:,-1] = env.robot.kd
-
 def collect_episodes(args):
     np.random.seed(args.seed)
     # Make env and policy from args.
     env, args.max_episode_steps = make_env_from_args(args.env_name, args.seed)
     policy = make_policy_from_args(env, args.controller_class,
                                    args.max_episode_steps)
-    ptraj_data = None
-    if args.ptraj_pkl_file is not None:
-        assert(env.robot.control_mode == 'velocity')
-        assert(args.controller_class == 'WaypointsPolicy')
-        ptraj_data = pickle.load(
-            open(os.path.expanduser(args.ptraj_pkl_file), 'rb'))
-        args.num_episodes = len(ptraj_data)
     # Set up buffers.
     x_size = policy.get_params().shape[0]
     xi_size = env.observation_space.shape[0]
@@ -96,10 +56,7 @@ def collect_episodes(args):
     # Collect episodes from env.
     for sid in range(args.num_episodes):
         if sid%10==0: print('epsd {:d}'.format(sid))
-        if ptraj_data is None:
-            policy.resample_params()  # sample new random policy params
-        else:
-            init_from_moveit_ptraj(policy, ptraj_data[sid], env)
+        policy.resample_params()  # sample new random policy params
         unscaled_policy_params = policy.get_params()
         scaled_policy_params = policy.scale_params(unscaled_policy_params)
         policy.check_scaled_params(scaled_policy_params)
@@ -147,7 +104,6 @@ def main_multiproc(args):
 
 
 def main(args):
-    if args.ptraj_pkl_file is not None: assert(args.num_procs==1)
     x_buf, xi_1toT_buf, bads_1toT_buf, rwd_buf, rnd_params_buf = \
         collect_episodes(args) if args.num_procs<=1 else main_multiproc(args)
     # Save to disk.

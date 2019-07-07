@@ -1,8 +1,16 @@
 #
 # A quick script for equalizing the training data from env.
 #
-# To launch multiple from shell run:
-# for i in {10..19}; do `python distill_env_experience.py "~/local/experience/episodes10K_seed${i}_DaisyCustom-v0.npz" > /dev/null &`; done
+# This was useful for some versions of Daisy env+controllers that generated
+# extremely unbalanced training data (robot rotating in place in most samples).
+# Depending on our env you might need this in order to generate training data
+# that VAE-based training can handle. VAEs are known to be prone to collapsing
+# to the mean. A sequential VAE version helps a bit, since the trajectories
+# could be somewhat more varied than individual samples. Though keep in mind
+# that SVAE is not immune to the same problems that standard VAEs face.
+#
+# To launch multiple instances from shell run:
+# for i in {10..19}; do `python distill_env_experience.py "experience/episodes10K_seed${i}_DaisyCustom-v0.npz" > /dev/null &`; done
 #
 from glob import glob
 import os

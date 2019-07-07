@@ -8,7 +8,6 @@ import torch
 import torch.nn as nn
 
 import svae_dc_nets as nets
-from utils import prob
 
 
 def torch_mean(lst):
@@ -109,14 +108,10 @@ class SVAE_DC(nn.Module):
         recon_xi_distr = self.p_xi_gvn_taum(taum_smpl)
         recon_y_distr = self.p_y_gvn_psi(psi_smpl)
 
-        # Get sum_{xi_t not bad} [log p(xi_t | x_{t-1}, tau)]
-        # log ( prod_{t=1}^T p(xi_t | xi_{t-1}, tau_{1:K}) )
-        # torch.where(select,...) within log_density_()
-        # implements selective reconstruction.
-        # We do not standardize xi, since this would make scaling to a known
-        # range problematic. Instead we use std for appropriate loss scaling
-        # via passing adjust to be used when computing log_density:
-        # using (x-mu)*adjust instead of (x-mu).
+        # Get log p(xi_t | x_{t-1}, tau)
+        # Note: we had use_laplace for our experiments. Gaussian alternative
+        # has more experimental options here. Though ultimately using Laplace
+        # distribution yielded faster and more reliable results for us.
         if use_laplace:
             recon_xi_distr_laplace = torch.distributions.laplace.Laplace(
                 recon_xi_distr.mu, torch.exp(recon_xi_distr.logvar).sqrt())
@@ -126,6 +121,10 @@ class SVAE_DC(nn.Module):
                 xi_1toT.view(-1,xi_size))
             ll_recon_y = recon_y_distr_laplace.log_prob(badness.unsqueeze(1))
         else:
+            # We do not standardize xi, since this would make scaling to a known
+            # range problematic. Instead we use std for appropriate loss scaling
+            # via passing adjust to be used when computing log_density:
+            # using (x-mu)*adjust instead of (x-mu).
             adjust = torch.div(self.xi_dim_weights.view(1,-1), xi_std.view(1,-1))
             ll_recon_xi = recon_xi_distr.log_density_(
                 xi_1toT.view(-1,xi_size), omit=None, adjust=adjust, debug=debug)
