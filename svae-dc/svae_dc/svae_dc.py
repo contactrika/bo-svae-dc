@@ -254,9 +254,9 @@ class SVAE_DC(nn.Module):
         # sigmoid(x*k) to sharpen the output
         goodness = torch.sigmoid((raw_goodness-self.good_th)*25.0)
         if debug:
-            logging.info('raw_goodness')
-            logging.info(raw_goodness.squeeze().detach().cpu().numpy())
             logging.info('goodness')
+            logging.info(raw_goodness.squeeze().detach().cpu().numpy())
+            logging.info('transformed_goodness')
             logging.info(goodness.squeeze().detach().cpu().numpy())
         return goodness
 

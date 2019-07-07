@@ -97,8 +97,8 @@ class SVAEDataset(data.Dataset):
              self.bads_1toT[bad_id], self.bads_1toT[minrwd_id]], dim=0)
         rwd = torch.stack([self.rwd[good_id], self.rwd[maxrwd_id],
                            self.rwd[bad_id], self.rwd[minrwd_id]], dim=0)
-        logging.info('sample_good_bad(): rwd'); logging.info(rwd)
-        logging.info('goodness'); logging.info(1-bads_1toT.mean(dim=1))
+        logging.info('sample_good_bad(): true_rwd'); logging.info(rwd)
+        logging.info('true_goodness'); logging.info(1-bads_1toT.mean(dim=1))
         logging.info('x'); logging.info(x.size()); logging.info(x)
         return x, xi_1toT, bads_1toT, rwd
 

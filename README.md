@@ -107,31 +107,50 @@ python bo_main.py --gpu=0 --run_id=0 \
  --bo_kernel_type=SVAE-DC-SE \
  --env_name=FrankaTorque-v0 \
  --controller_class=DaisyGait11DPolicy \
- --svae_dc_override_good_th=0.3500 \
+ --svae_dc_override_good_th=0.35 \
  --svae_dc_checkpt=/svaedata/output_run0_190707_120729/checkpt-70000.pt
 ```
 
 ```svae_dc_override_good_th``` parameter is not required, but can be useful. To see what a good value would be for your case: look at SVAE-DC training output logs (e.g. ```svaedata/output_run0_190707_120729/log.txt```). You will see printouts like this:
 
 ```
-2019-07-07 12:13:04,124 Visualizing epoch 7
-2019-07-07 12:13:04,227 knl res for bids 0 1
-2019-07-07 12:13:04,233 raw_goodness
-2019-07-07 12:13:04,233 [0.5116 0.5116]
-2019-07-07 12:13:04,235 goodness
-2019-07-07 12:13:04,236 [0.9827 0.9827]
+2019-06-27 16:58:58,796 sample_good_bad(): true_rwd
+2019-06-27 16:58:58,796 tensor([[ 0.5199],
+        [ 0.6909],
+        [-0.9277],
+        [-1.8000]])
+2019-06-27 16:58:58,798 true_goodness
+2019-06-27 16:58:58,798 tensor([[1.0000],
+        [0.8343],
+        [0.0938],
+        [0.2814]])
+...        
+2019-06-27 16:58:58,805 Visualizing epoch 190000
+2019-06-27 16:58:58,815 knl res for bids 0 1
+2019-06-27 16:58:58,818 goodness
+2019-06-27 16:58:58,818 [0.6777 0.8109]
+2019-06-27 16:58:58,820 transformed_goodness
+2019-06-27 16:58:58,820 [0.9997 1.    ]
 ...
-2019-07-07 12:13:04,280 knl res for bids 2 3
-2019-07-07 12:13:04,286 raw_goodness
-2019-07-07 12:13:04,287 [0.5116 0.5116]
-2019-07-07 12:13:04,288 goodness
-2019-07-07 12:13:04,288 [0.9827 0.9827]
-2019-07-07 12:13:04,289 raw distance (norm) 0.0016
+2019-06-27 16:58:58,840 knl res for bids 2 3
+2019-06-27 16:58:58,843 goodness
+2019-06-27 16:58:58,843 [0.109  0.2792]
+2019-06-27 16:58:58,844 transformed_goodness
+2019-06-27 16:58:58,844 [0.0024 0.1455]
+2019-06-27 16:58:58,845 raw distance (norm) 0.4701
 ```
 
-TODO 
+This code is from training with ```--good_th=0.35```
+This means that trajectories with goodness>0.35 will be considered acceptable. You can see that in the output snippet: test trajectories 0,1 (bids 0, 1) have high true goodness (1.0, 0.83) and also high goodness according to SVAE-DC (0.677, 0.8109). While test trajectories 2,3 (bids 2,3) have low true goodness (0.0938, 0.2814) and also low goodness according to SVAE-DC: (0.109  0.2792). So, a threshold of e.g. 0.35 is appropriate separation of good-vs-bad trajectories in this case. 
+
+In the future we could let uses specify good/bad in a more visual way during data collection. This information can't be extracted from reward, since we don't want to make reward-dependent kernels. Instead the 'goodness' is something about the desirability/stability/safety overall, and that is not strictly task-independent (and it varies depending on the domain and which behaviors are considered acceptable/desirable).
+
 
 <hr />
+
+## Visualize best controllers found by BO.
+
+TODO
 
 ## Notes
 
