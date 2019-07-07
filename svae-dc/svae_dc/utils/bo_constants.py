@@ -8,6 +8,11 @@ import gpytorch
 class GPConstants(object):
     # For hardware runs we did (for Daisy were running on a laptop):
     # N_RESTART_CANDIDATES=2K, N_RESTARTS_PER_ROUND=5, N_RESTART_ROUNDS=5
+    #
+    # If you are running into cuda memory issues: this is a known problem with
+    # BoTorch/cuda memory interplay, but will be fixed soon by the botorch team.
+    # Meanwhile you can try using smaller:
+    # N_RESTART_CANDIDATES, N_RESTARTS_PER_ROUND, N_RESTART_ROUNDS
     MAX_MLL_FIT_ITER = 100  # max iterations to fit marginal LL (hyp opt) (50)
     MAX_ACQ_ITER = 10  # max iterations to optimize acquisition function (100)
     N_RESTART_CANDIDATES = 1000 #2000  # num items from which to select restarts (2K)

@@ -111,18 +111,31 @@ python svae-dc/svae_dc/bo_main.py --gpu=0 --run_id=0 \
  --env_name=FrankaTorque-v2 \
  --controller_class=WaypointsMinJerkPolicy \
  --svae_dc_override_good_th=0.35 \
- --svae_dc_checkpt=svaedata/output_run0_190707_125546/checkpt-14000.pt
+ --svae_dc_checkpt=svaedata/output_run0_190707_125546/checkpt-14000.pt \
+ --output_prefix=botorchdata/
 ```
 
 ```svae_dc_override_good_th``` parameter is not required, but can be useful (see notes for more info).
-
-BO training will produce 
 
 <hr />
 
 ## Visualize best controllers found by BO.
 
-TODO
+BO training will produce output in ```botorchdata``` with log files and npz files that record BO results (e.g. ```botorchdata/output_FrankaTorque-v2_SVAE-DC-SE_UCB1.0_run0/x_y_all_run0.npz```)
+
+You can load and visualize best controllers from BO runs (we included example ```x_y_all_run0.npz``` file:
+
+```
+python svae-dc/svae_dc/env_demo.py \
+ --env_name=FrankaTorqueViz-v2 \
+ --controller_class=WaypointsMinJerkPolicy \
+ --policy_file=svae-dc/svae_dc/utils/x_y_all_run0.npz
+```
+
+You should see a policy that successfully pushes one of the blocks across the table. A risky one (since the block ends up just on the edge of the table area), but that's only after a few minutes fo training on 1K data points, so not bad for a start :-)
+
+<img src="img/FrankaTorque_BO_result.png" alt="FrankaTorque_BO_result"/>
+
 
 <hr />
 <hr />

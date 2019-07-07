@@ -94,9 +94,9 @@ def get_args():
     parser = argparse.ArgumentParser(description="EnvDemo")
     parser.add_argument('--seed', type=int, default=0, help='Random seed')
     parser.add_argument('--env_name', type=str,
-                        default='DaisyCustomViz-v0', help='Env name')
+                        default='YumiVelViz-v2', help='Env name')
     parser.add_argument('--controller_class', type=str,
-                        default='DaisyGait11DPolicy',
+                        default='WaypointsVelPolicy',
                         choices=['DaisyGait11DPolicy', 'DaisyGait27DPolicy',
                                  'DaisyTripod27DPolicy',
                                  'WaypointsPosPolicy', 'WaypointsEEPolicy',
