@@ -1,4 +1,4 @@
-## BO-SVAE-DC code for CoRL2019 submission (anonymized)
+## BO-SVAE-DC
 
 ### Installation
 
