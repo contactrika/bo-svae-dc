@@ -1,6 +1,8 @@
 #
 # A quick script to plot BO results.
 #
+# @contactrika
+#
 import os
 
 import numpy as np

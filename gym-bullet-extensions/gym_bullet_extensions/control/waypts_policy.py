@@ -11,8 +11,8 @@
 # instance of BulletManipulator class. They use it to access the state of
 # the robot and Jacobian info.
 #
+# @contactrika
 #
-
 import numpy as np
 from scipy.signal import savgol_filter
 

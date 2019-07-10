@@ -1,6 +1,8 @@
 #
 # Custom GP kernels for Bayesian Optimization.
 #
+# @contactrika
+#
 import logging
 import sys
 import time

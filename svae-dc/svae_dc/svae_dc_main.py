@@ -1,6 +1,8 @@
 #
 # Main for training Sequential VAE with Dynamic Compression (SVAE-DC).
 #
+# @contactrika
+#
 from datetime import datetime
 import logging
 import os

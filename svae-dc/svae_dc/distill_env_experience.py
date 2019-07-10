@@ -12,6 +12,8 @@
 # To launch multiple instances from shell run:
 # for i in {10..19}; do `python distill_env_experience.py "experience/episodes10K_seed${i}_DaisyCustom-v0.npz" > /dev/null &`; done
 #
+# @contactrika
+#
 from glob import glob
 import os
 import sys

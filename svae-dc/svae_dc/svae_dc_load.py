@@ -1,6 +1,8 @@
 #
 # Utility for loading trained SVAE-DC model.
 #
+# @contactrika
+#
 import logging
 import os
 

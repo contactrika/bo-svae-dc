@@ -1,6 +1,8 @@
 #
 # Code to visualize samples and latent path for SVAE-DC.
 #
+# @contactrika
+#
 import logging
 import os
 import time

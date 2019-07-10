@@ -1,6 +1,8 @@
 #
 # Utils for Sequential VAE with Dynamic Compression (SVAE-DC).
 #
+# @contactrika
+#
 from glob import glob
 import logging
 import os

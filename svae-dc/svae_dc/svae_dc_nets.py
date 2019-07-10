@@ -1,6 +1,8 @@
 #
 # NNs for Sequential Variational Autoencoder with Dynamic Compression (SVAE-DC).
 #
+# @contactrika
+#
 import logging
 
 import numpy as np

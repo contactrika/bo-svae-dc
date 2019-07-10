@@ -1,6 +1,8 @@
 #
 # A quick utility script to launch multiple BO runs locally.
 #
+# @contactrika
+#
 import os
 import sys
 

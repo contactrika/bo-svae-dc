@@ -1,6 +1,8 @@
 #
 # A quick script to test pybullet envs.
 #
+# @contactrika
+#
 import os
 
 import numpy as np

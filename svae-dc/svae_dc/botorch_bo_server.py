@@ -5,6 +5,8 @@
 # Note: botorch does maximization by default, so we will perform maximization
 # of rewards directly (can be interpreted later as minimizing costs, if needed).
 #
+# @contactrika
+#
 import argparse
 import logging
 import os

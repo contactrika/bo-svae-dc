@@ -1,6 +1,8 @@
 #
 # Parametric gait controllers.
 #
+# @akshara
+#
 import numpy as np
 
 from .cpg_oscillator import CpgController

@@ -1,6 +1,8 @@
 #
 # Utils for incorporating SVAE-DC kernel into botorch.
 #
+# @contactrika
+#
 #import gc
 import logging
 #import os

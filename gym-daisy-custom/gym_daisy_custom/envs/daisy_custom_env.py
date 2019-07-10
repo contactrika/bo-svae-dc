@@ -1,6 +1,8 @@
 #
 # A customized env for Daisy robot simulations.
 #
+# @contactrika
+#
 from copy import copy
 
 import numpy as np

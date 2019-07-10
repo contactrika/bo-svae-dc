@@ -2,6 +2,8 @@
 # PyBullet simulator setup for 7DOF manipulators (Franka Emika, Sawyer).
 # Supports gripper control for Franka Emika robot.
 #
+# @contactrika
+#
 from copy import copy
 import os
 import time

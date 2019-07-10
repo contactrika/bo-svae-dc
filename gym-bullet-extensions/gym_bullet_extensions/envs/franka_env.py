@@ -1,6 +1,8 @@
 #
 # PyBullet gym env for Franka Emika robot.
 #
+# @contactrika
+#
 import os
 
 import numpy as np

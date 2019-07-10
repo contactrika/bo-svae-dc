@@ -1,6 +1,8 @@
 #
 # Torque control with minimum jerk EE waypoints.
 #
+# @akshara
+#
 import numpy as np
 import math
 import pybullet

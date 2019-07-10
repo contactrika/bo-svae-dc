@@ -1,6 +1,8 @@
 #
 # Main script for launching BO experiments with SVAE-DC kernel.
 #
+# @contactrika
+#
 import logging
 import shutil
 import os

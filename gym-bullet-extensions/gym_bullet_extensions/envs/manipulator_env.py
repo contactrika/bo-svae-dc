@@ -1,6 +1,8 @@
 #
 # PyBullet gym env for manipulators and movable objects.
 #
+# @contactrika
+#
 from copy import copy
 
 import numpy as np

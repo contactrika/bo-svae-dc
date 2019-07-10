@@ -1,7 +1,8 @@
 #
 # Useful constants for GPs and Bayesian Optimization.
 #
-
+# @contactrika
+#
 import gpytorch
 
 
