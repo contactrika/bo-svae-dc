@@ -1,4 +1,4 @@
-## BO-SVAE-DC
+## Bayesian Optimization in Variational Latent Spaces with Dynamic Compression (BO-SVAE-DC)
 
 ### Installation
 
