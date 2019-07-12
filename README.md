@@ -139,6 +139,19 @@ You should see a policy that successfully pushes one of the blocks across the ta
 
 <hr />
 <hr />
+
+## Bibtex
+
+If you find this code useful in your research and would like to include a citation, below is a bibtex entry:
+```
+@misc{antonova19BOarXiv,
+Author = {Rika Antonova and Akshara Rai and Tianyu Li and Danica Kragic},
+Title = {Bayesian Optimization in Variational Latent Spaces with Dynamic Compression},
+Year = {2019},
+Eprint = {arXiv:1907.04796},
+}
+```
+<hr />
 <hr />
 
 ## Notes
