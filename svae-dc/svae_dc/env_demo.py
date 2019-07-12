@@ -15,7 +15,7 @@ np.set_printoptions(precision=4, linewidth=150, threshold=np.inf, suppress=True)
 import torch
 torch.set_printoptions(precision=4, linewidth=150, threshold=None, sci_mode=False)
 
-from utils.svae_dc_utils import make_env_from_args, make_policy_from_args
+from .utils.svae_dc_utils import make_env_from_args, make_policy_from_args
 
 
 def show_waypts(env, policy, tgt_viz_ids):

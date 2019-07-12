@@ -16,8 +16,6 @@ from gpytorch.utils.transforms import inv_sigmoid
 from .prob import GaussianDiagDistr
 from .bo_constants import GPConstants, SaneInterval
 
-from utils import prob
-
 
 def assert_isclose(tnsr1, tnsr2, eps=1e-6):
     ok = torch.all(torch.lt(torch.abs(torch.add(tnsr1, -tnsr2)), eps))
@@ -53,7 +51,7 @@ class KernelTransform:
             # for long trajectories, but need to compare against it anyway.
             #out_distr, _, _ = self.tau_fxn.generate(
             #        x_in, require_grad=True, use_mean=True, debug=debug)
-            #out_distr = prob.GaussianDiagDistr(
+            #out_distr = GaussianDiagDistr(
             #    out_distr.mu, out_distr.logvar, logvar_limit=2)
             #out_x = out_distr.mu
             out_distr, _, _ = self.tau_fxn.generate(
@@ -76,7 +74,7 @@ class KernelTransform:
             out_x_std = torch.sqrt(S/(n-1))
             out_x_logvar = torch.log(torch.pow(out_x_std,2))
             logvar_limit = 4  # since VI is prone to under-estimating variance
-            out_distr = prob.GaussianDiagDistr(
+            out_distr = GaussianDiagDistr(
                 out_x_mean, out_x_logvar, logvar_limit)
             out_x = out_x_mean
         if x.dim()==3:

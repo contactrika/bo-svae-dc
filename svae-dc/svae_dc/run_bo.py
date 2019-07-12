@@ -13,7 +13,7 @@ import torch
 np.set_printoptions(precision=4, threshold=sys.maxsize, suppress=True)
 torch.set_printoptions(precision=4, threshold=sys.maxsize, sci_mode=False)
 
-from botorch_bo_server import BotorchBOServer, get_args
+from .botorch_bo_server import BotorchBOServer, get_args
 
 
 def objective_fxn(env, policy, y_lims):

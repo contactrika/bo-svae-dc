@@ -14,12 +14,12 @@ import torch
 np.set_printoptions(precision=4, linewidth=150, threshold=np.inf, suppress=True)
 #torch.set_printoptions(precision=2, linewidth=150, threshold=None)
 
-from svae_dc import SVAE_DC
-from svae_dc_args import get_all_args
-from svae_dc_nets import NetsParams
-from utils.visualize import visualize_samples
-from utils.svae_dc_utils import load_checkpoint, SVAEDataset
-from utils.svae_dc_utils import make_env_from_args, make_policy_from_args
+from .svae_dc import SVAE_DC
+from .svae_dc_args import get_all_args
+from .svae_dc_nets import NetsParams
+from .utils.visualize import visualize_samples
+from .utils.svae_dc_utils import load_checkpoint, SVAEDataset
+from .utils.svae_dc_utils import make_env_from_args, make_policy_from_args
 
 
 def do_logging(epoch, elbo, svae_dc_params, optimizer, tb_writer, debug_dict):

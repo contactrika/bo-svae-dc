@@ -9,7 +9,7 @@ import os
 
 import numpy as np
 
-from utils.svae_dc_utils import (
+from .utils.svae_dc_utils import (
     make_env_from_args, make_policy_from_args, get_scaled_obs
 )
 

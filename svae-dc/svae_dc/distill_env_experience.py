@@ -23,7 +23,7 @@ import torch
 torch.set_printoptions(precision=2, linewidth=150, threshold=5000,
                        sci_mode=False, edgeitems=1000)
 
-from utils.svae_dc_utils import make_env_from_args
+from .utils.svae_dc_utils import make_env_from_args
 
 
 def get_rwd_ranges(fname):

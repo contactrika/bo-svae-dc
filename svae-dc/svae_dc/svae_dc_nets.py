@@ -9,7 +9,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from utils import prob
+from .utils import prob
 
 
 class LogvarFixedLimit:

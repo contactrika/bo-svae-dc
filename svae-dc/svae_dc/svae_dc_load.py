@@ -8,8 +8,8 @@ import os
 
 import torch
 
-from svae_dc_nets import NetsParams
-from svae_dc import SVAE_DC
+from .svae_dc_nets import NetsParams
+from .svae_dc import SVAE_DC
 
 
 def svae_dc_load(env, policy, svae_dc_checkpt, override_good_th, env_name,

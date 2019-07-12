@@ -18,14 +18,14 @@ import torch
 np.set_printoptions(precision=4, threshold=sys.maxsize, suppress=True)
 torch.set_printoptions(precision=4, threshold=sys.maxsize, sci_mode=False)
 
-from utils.bo_constants import reward_lims
-from utils.bo_utils import (
+from .utils.bo_constants import reward_lims
+from .utils.bo_utils import (
     init_and_fit_gp, optimize_UCB, UpperConfidenceBound
 )
-from utils.svae_dc_utils import (
+from .utils.svae_dc_utils import (
     make_env_from_args, make_policy_from_args
 )
-from svae_dc_load import svae_dc_load
+from .svae_dc_load import svae_dc_load
 
 
 class BotorchBOServer:

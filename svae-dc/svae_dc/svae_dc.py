@@ -9,7 +9,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-import svae_dc_nets as nets
+from . import svae_dc_nets as nets
 
 
 def torch_mean(lst):
