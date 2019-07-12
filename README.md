@@ -32,11 +32,11 @@ cd ../
 
 ### Visualizing Yumi and Franka envs:
 ```
-python svae-dc/svae_dc/env_demo.py \
+python -m svae_dc.env_demo \
  --env_name=FrankaTorqueViz-v2 \
  --controller_class=WaypointsMinJerkPolicy
 
-python svae-dc/svae_dc/env_demo.py \
+python -m svae_dc.env_demo \
  --env_name=YumiVelViz-v2 \
  --controller_class=WaypointsVelPolicy
 ```
@@ -50,7 +50,7 @@ Note: Yumi visualization is quite compute-heavy for a machine without hardware g
 Example of collecting 1K episodes from FrankaTorque env:
 
 ```
-python svae-dc/svae_dc/collect_env_experience.py \
+python -m svae_dc.collect_env_experience \
  --env_name=FrankaTorque-v2 \
  --controller_class=WaypointsMinJerkPolicy \
  --output_prefix=experience/ \
@@ -63,7 +63,7 @@ Run the above command with a different seed to get a shard of training data as w
 ### SVAE-DC training:
 
 ```
-python svae-dc/svae_dc/svae_dc_main.py --gpu=0 \
+python -m svae_dc.svae_dc_train --gpu=0 \
  --env_name=FrankaTorque-v2 \
  --controller_class=WaypointsMinJerkPolicy \
  --learning_rate=1e-4 --batch_size=32 \
@@ -105,7 +105,7 @@ When training with very little data (as in this this example) you might see warn
 SVAE-DC training will create checkpoints in directories that look like ```svaedata/output_run0_190707_120729/```. The last two checkpoint will be kept during training. Once you are satisfied with the training, pick a checkpoint and start BO:
 
 ```
-python svae-dc/svae_dc/bo_main.py --gpu=0 --run_id=0 \
+python -m svae_dc.run_bo --gpu=0 --run_id=0 \
  --bo_num_init=2 --bo_num_trials=20 \
  --bo_kernel_type=SVAE-DC-SE \
  --env_name=FrankaTorque-v2 \
@@ -126,7 +126,7 @@ BO training will produce output in ```botorchdata``` with log files and npz file
 You can load and visualize best controllers from BO runs (we included example ```x_y_all_run0.npz``` file:
 
 ```
-python svae-dc/svae_dc/env_demo.py \
+python -m svae_dc.env_demo \
  --env_name=FrankaTorqueViz-v2 \
  --controller_class=WaypointsMinJerkPolicy \
  --policy_file=svae-dc/svae_dc/utils/x_y_all_run0.npz
