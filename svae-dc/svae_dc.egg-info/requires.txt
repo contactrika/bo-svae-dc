@@ -1,8 +1,0 @@
-gym
-torch
-numpy
-moviepy
-gpytorch
-botorch
-baselines
-tensorboardX
