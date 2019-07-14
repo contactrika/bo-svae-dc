@@ -17,7 +17,7 @@ class FrankaEnv(ManipulatorEnv):
                  control_mode='velocity', visualize=False, debug_level=0):
         self.pos_only_state = True  # don't include velocities in state
         robot = BulletManipulator(
-            os.path.join('franka_robot', 'fullfranka.urdf'),
+            os.path.join('franka_robot', 'franka_small_fingers.urdf'),
             control_mode=control_mode,
             ee_joint_name='panda_joint7', ee_link_name='panda_hand',
             base_pos=[0,0,0], dt=1.0/500.0,

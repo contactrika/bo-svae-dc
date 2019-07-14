@@ -1,3 +1,4 @@
+ENV/
 .idea/
 */*.egg-info/
 
