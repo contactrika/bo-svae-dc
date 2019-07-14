@@ -219,13 +219,15 @@ class BulletManipulator:
 
     def load_objects_from_file(self, objects_file, object_poses):
         # Subclasses can call this method to load custom obstacles.
-        robot_description_folder = os.path.split(__file__)[0]
-        data_path = os.path.join(robot_description_folder, "data")
+        if not os.path.isabs(objects_file):
+            robot_description_folder = os.path.split(__file__)[0]
+            data_path = os.path.join(robot_description_folder, "data")
+            objects_file = os.path.join(data_path, objects_file)
         object_ids = []
-        objects_file = os.path.join(data_path, objects_file)
         # Note: setting useFixedBase=True for loadURDF() breaks collision
         # detection, so we use another way to ensure obstacle is stationary.
         for i in range(len(object_poses)):
+            print('loading URDF: ', objects_file)
             obj_id = self.sim.loadURDF(objects_file, object_poses[i])
             object_ids.append(obj_id)
         return object_ids

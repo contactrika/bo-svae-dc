@@ -19,7 +19,7 @@
         <cylinder length="0.22" radius="0.05"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
-       <material name="pink">
+       <material name="white">
         <color rgba="0.9 0.9 0.9 0.8"/>
       </material>
     </visual>
