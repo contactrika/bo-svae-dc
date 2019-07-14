@@ -90,7 +90,6 @@ def play(env, policy, num_episodes, num_randomized=0,
 
 def load_policies(policy_file, num_episodes):
     if policy_file is None: return None, None, num_episodes
-    scaled_policy_params_lst = None; rnd_params_lst = None
     policy_files = sorted(glob(os.path.expanduser(policy_file)))
     assert(len(policy_files)>0)  # file pattern did not match any files
     scaled_policy_params_lst = []; rnd_params_lst = []
