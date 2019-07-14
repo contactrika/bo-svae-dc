@@ -231,15 +231,16 @@ class BulletManipulator:
             if objects_file.endswith('.urdf'):
                 obj_id = self.sim.loadURDF(
                     objects_file, object_poses[i], object_quats[i])
-            elif objects_file.endswith('.sdf'):
-                obj_id = self.sim.loadSDF(
-                    objects_file, object_poses[i], object_quats[i])[0]
-            elif objects_file.endswith('.xml'):
-                obj_id = self.sim.loadMJCF(
-                    objects_file, object_poses[i], object_quats[i])[0]
+            elif objects_file.endswith(('.sdf', '.xml')):
+                if objects_file.endswith('.sdf'):
+                    obj_id = self.sim.loadSDF(objects_file)[0]
+                else:  # MuJoCo xml
+                    obj_id = self.sim.loadMJCF(objects_file)[0]
+                self.sim.resetBasePositionAndOrientation(
+                    obj_id, object_poses[i], object_quats[i])
             else:
                 print('Unknown objects_file format', objects_file)
-                assert(False)  # unkonwn objects_file format
+                assert(False)  # unknown objects_file format
             object_ids.append(obj_id)
         return object_ids
 
