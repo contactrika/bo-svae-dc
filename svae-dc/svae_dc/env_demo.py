@@ -183,7 +183,6 @@ def main(args):
     # Play.
     play(env, policy, args.num_episodes, args.num_randomized,
          scaled_policy_params_lst, rnd_params_lst, resample_policy_params=True)
-
     # Cleanup.
     env.close()
 
