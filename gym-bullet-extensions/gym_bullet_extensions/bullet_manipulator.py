@@ -227,11 +227,19 @@ class BulletManipulator:
         # Note: setting useFixedBase=True for loadURDF() breaks collision
         # detection, so we use another way to ensure obstacle is stationary.
         for i in range(len(object_poses)):
-            print('loading URDF: ', objects_file)
-            print('object_poses[i]', object_poses[i])
-            print('object_quats[i]', object_quats[i])
-            obj_id = self.sim.loadURDF(
-                objects_file, object_poses[i], object_quats[i])
+            print('loading: ', objects_file)
+            if objects_file.endswith('.urdf'):
+                obj_id = self.sim.loadURDF(
+                    objects_file, object_poses[i], object_quats[i])
+            elif objects_file.endswith('.sdf'):
+                obj_id = self.sim.loadSDF(
+                    objects_file, object_poses[i], object_quats[i])[0]
+            elif objects_file.endswith('.xml'):
+                obj_id = self.sim.loadMJCF(
+                    objects_file, object_poses[i], object_quats[i])[0]
+            else:
+                print('Unknown objects_file format', objects_file)
+                assert(False)  # unkonwn objects_file format
             object_ids.append(obj_id)
         return object_ids
 
