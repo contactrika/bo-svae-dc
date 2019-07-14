@@ -329,7 +329,7 @@
   <joint name="robot_l_to_world" type="fixed">
     <parent link="world"/>
     <child link="panda_link0_l"/>
-    <origin rpy="0 0 0" xyz="-0.01 0.83 0.03"/>
+    <origin rpy="0 0 0" xyz="-0.01 -0.83 0.03"/>
     <dynamics damping="1.0"/>
   </joint>
   <link name="panda_link0_l">
