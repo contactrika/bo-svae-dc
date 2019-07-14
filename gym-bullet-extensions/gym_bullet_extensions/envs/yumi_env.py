@@ -48,11 +48,12 @@ class YumiEnv(ManipulatorEnv):
             'cylinder_papertowel.urdf', max_episode_steps, visualize,
             debug_level)
 
-    def get_all_init_object_poses(self):
+    def get_all_init_object_poses(self, num_objects):
         # 1st object starts at x=0.25 2nd ends at x=0.48
         all_init_object_poses = np.array([
             [0.31,-0.30,0.11], [0.43,-0.30,0.11]])
-        return all_init_object_poses
+        init_object_quats = [[0,0,0,1]]*num_objects
+        return all_init_object_poses[0:num_objects], init_object_quats
 
     def get_init_pos(self):
         ee_pos = np.array([0.3, -0.5, 0.25])

@@ -17,7 +17,6 @@ from gym_bullet_extensions.bullet_manipulator import BulletManipulator
 
 class ManipulatorEnv(gym.Env):
     MAX_NUM_OBJECTS = 4
-    OBJECT_QUATS = np.array([[0,0,0,1]]*MAX_NUM_OBJECTS)
     OBJECT_ORI_THRESH = 0.5  # how far away from vertical is ok (~30deg)
     OBJECT_MIN = np.array([-1,-1,0]+[-1]*3+[-1]*3)  # pos, euler sin, euler cos
     OBJECT_MAX = np.array([2,2,1]+[1]*3+[1]*3)      # pos, euler sin, euler cos
@@ -43,10 +42,10 @@ class ManipulatorEnv(gym.Env):
         self.max_episode_steps = max_episode_steps
         self.visualize = visualize
         # Init object properties.
-        self.object_init_poses = self.get_all_init_object_poses()[0:num_objects]
-        self.object_quats = ManipulatorEnv.OBJECT_QUATS[0:num_objects]
+        self.object_init_poses, self.object_init_quats = \
+            self.get_all_init_object_poses(num_objects)
         self.object_ids = self.robot.load_objects_from_file(
-            object_urdf, self.object_init_poses)
+            object_urdf, self.object_init_poses, self.object_init_quats)
         self.object_mass = ManipulatorEnv.OBJECT_MASS
         self.object_restitution = ManipulatorEnv.OBJECT_RESTITUTION
         self.object_lateral_friction = ManipulatorEnv.OBJECT_LATERAL_FRICTION
@@ -102,7 +101,7 @@ class ManipulatorEnv(gym.Env):
         self.collided = False
         self.robot.reset_to_qpos(self.reset_qpos)
         self.robot.reset_objects(
-            self.object_ids, self.object_init_poses, self.object_quats,)
+            self.object_ids, self.object_init_poses, self.object_init_quats)
         return self.get_obs()
 
     def randomize(self, min_scaling=None, max_scaling=None, debug=False):

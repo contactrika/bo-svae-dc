@@ -217,7 +217,7 @@ class BulletManipulator:
             cameraDistance=cameraDistance, cameraYaw=cameraYaw,
             cameraPitch=cameraPitch, cameraTargetPosition=[0.5, 0, 0])
 
-    def load_objects_from_file(self, objects_file, object_poses):
+    def load_objects_from_file(self, objects_file, object_poses, object_quats):
         # Subclasses can call this method to load custom obstacles.
         if not os.path.isabs(objects_file):
             robot_description_folder = os.path.split(__file__)[0]
@@ -228,7 +228,10 @@ class BulletManipulator:
         # detection, so we use another way to ensure obstacle is stationary.
         for i in range(len(object_poses)):
             print('loading URDF: ', objects_file)
-            obj_id = self.sim.loadURDF(objects_file, object_poses[i])
+            print('object_poses[i]', object_poses[i])
+            print('object_quats[i]', object_quats[i])
+            obj_id = self.sim.loadURDF(
+                objects_file, object_poses[i], object_quats[i])
             object_ids.append(obj_id)
         return object_ids
 

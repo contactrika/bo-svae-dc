@@ -57,10 +57,11 @@ class FrankaEnv(ManipulatorEnv):
                                0.2047,  2.4689,  1.5125,  0., 0.])
         return init_qpos, ee_pos, ee_quat, fing_dist
 
-    def get_all_init_object_poses(self):
+    def get_all_init_object_poses(self, num_objects):
         all_init_object_poses = np.array([
             [0.32,0.15,0.11], [0.50,0.15,0.11]])
-        return all_init_object_poses
+        init_object_quats = [[0,0,0,1]]*num_objects
+        return all_init_object_poses[0:num_objects], init_object_quats
 
     def get_is_bad(self, debug=False):
         bad = super(FrankaEnv, self).get_is_bad(debug)
