@@ -98,11 +98,12 @@ class BulletManipulator:
         self._aux_sim.setAdditionalSearchPath(pybullet_data.getDataPath())
         self._aux_sim.loadURDF("plane.urdf", [0, 0, 0])
         # Load robot from URDF.
-        robot_description_folder = os.path.split(__file__)[0]
-        data_path = os.path.join(robot_description_folder, 'data')
-        robot_path = os.path.join(data_path, robot_desc_file)
+        if not os.path.isabs(robot_desc_file):
+            robot_description_folder = os.path.split(__file__)[0]
+            data_path = os.path.join(robot_description_folder, 'data')
+            robot_desc_file = os.path.join(data_path, robot_desc_file)
         self.info = self.load_robot(
-            robot_path, ee_joint_name, ee_link_name,
+            robot_desc_file, ee_joint_name, ee_link_name,
             left_ee_joint_name, left_ee_link_name,
             left_fing_link_prefix, left_joint_suffix,
             base_pos=base_pos, base_quat=[0,0,0,1])

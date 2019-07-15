@@ -270,7 +270,7 @@
       <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
     </inertial>
   </link>
-  <link name="panda_leftfinger_r">
+  <link name="panda_hand_r_finger_l">
     <visual>
       <geometry>
         <mesh filename="meshes/visual/finger.dae" />
@@ -289,7 +289,7 @@
       <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
     </inertial>
   </link>
-  <link name="panda_rightfinger_r">
+  <link name="panda_hand_r_finger_r">
     <visual>
       <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
       <geometry>
@@ -310,20 +310,20 @@
       <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
     </inertial>
   </link>
-  <joint name="panda_finger_joint1_r" type="prismatic">
+  <joint name="panda_hand_r_finger_l_joint" type="prismatic">
     <parent link="panda_hand_r"/>
-    <child link="panda_leftfinger_r"/>
+    <child link="panda_hand_r_finger_l"/>
     <origin rpy="0 0 0" xyz="0 0 0.0584"/>
     <axis xyz="0 1 0"/>
     <limit effort="20" lower="0.0" upper="0.04" velocity="0.2"/>
   </joint>
-  <joint name="panda_finger_joint2_r" type="prismatic">
+  <joint name="panda_hand_r_finger_r_joint" type="prismatic">
     <parent link="panda_hand_r"/>
-    <child link="panda_rightfinger_r"/>
+    <child link="panda_hand_r_finger_r"/>
     <origin rpy="0 0 0" xyz="0 0 0.0584"/>
     <axis xyz="0 -1 0"/>
     <limit effort="20" lower="0.0" upper="0.04" velocity="0.2"/>
-    <mimic joint="panda_finger_joint1_r"/>
+    <mimic joint="panda_hand_r_finger_l_joint"/>
   </joint>
   <!--///////////////////////////////////// LEFT ARM ////////////////////////////////  -->
   <joint name="robot_l_to_world" type="fixed">
@@ -584,7 +584,7 @@
       <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
     </inertial>
   </link>
-  <link name="panda_leftfinger_l">
+  <link name="panda_hand_l_finger_l">
     <visual>
       <geometry>
         <mesh filename="meshes/visual/finger.dae" />
@@ -603,7 +603,7 @@
       <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
     </inertial>
   </link>
-  <link name="panda_rightfinger_l">
+  <link name="panda_hand_l_finger_r">
     <visual>
       <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
       <geometry>
@@ -624,20 +624,20 @@
       <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
     </inertial>
   </link>
-  <joint name="panda_finger_joint1_l" type="prismatic">
+  <joint name="panda_hand_l_finger_l_joint" type="prismatic">
     <parent link="panda_hand_l"/>
-    <child link="panda_leftfinger_l"/>
+    <child link="panda_hand_l_finger_l"/>
     <origin rpy="0 0 0" xyz="0 0 0.0584"/>
     <axis xyz="0 1 0"/>
     <limit effort="20" lower="0.0" upper="0.04" velocity="0.2"/>
   </joint>
-  <joint name="panda_finger_joint2_l" type="prismatic">
+  <joint name="panda_hand_l_finger_r_joint" type="prismatic">
     <parent link="panda_hand_l"/>
-    <child link="panda_rightfinger_l"/>
+    <child link="panda_hand_l_finger_r"/>
     <origin rpy="0 0 0" xyz="0 0 0.0584"/>
     <axis xyz="0 -1 0"/>
     <limit effort="20" lower="0.0" upper="0.04" velocity="0.2"/>
-    <mimic joint="panda_finger_joint1_l"/>
+    <mimic joint="panda_hand_l_finger_l_joint"/>
   </joint>
   <!--///////////////////////////////////// GAZEBO RIGHT ARM ////////////////////////////////  -->
   <!-- Link0 -->
@@ -700,14 +700,14 @@
     <mu1>0.2</mu1>
     <mu2>0.2</mu2>
   </gazebo>
-  <!-- LinkRightFinger -->
-  <gazebo reference="panda_rightfinger_r">
+  <!-- LinkLeftFinger -->
+  <gazebo reference="panda_hand_r_finger_l">
     <material>Gazebo/Grey</material>
     <mu1>0.2</mu1>
     <mu2>0.2</mu2>
   </gazebo>
-  <!-- LinkLeftFinger -->
-  <gazebo reference="panda_leftfinger_r">
+  <!-- LinkRightFinger -->
+  <gazebo reference="panda_hand_r_finger_r">
     <material>Gazebo/Grey</material>
     <mu1>0.2</mu1>
     <mu2>0.2</mu2>
@@ -788,22 +788,22 @@
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
-  <transmission name="panda_leftfinger_r">
+  <transmission name="panda_hand_r_finger_l">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="panda_finger_joint1_r">
+    <joint name="panda_hand_r_finger_l_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="panda_finger_joint1_r">
+    <actuator name="panda_hand_r_finger_l_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
-  <transmission name="panda_rightfinger_r">
+  <transmission name="panda_hand_r_finger_r">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="panda_finger_joint2_r">
+    <joint name="panda_hand_r_finger_r_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="panda_finger_joint2_r">
+    <actuator name="panda_hand_r_finger_r_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
@@ -869,14 +869,14 @@
     <mu1>0.2</mu1>
     <mu2>0.2</mu2>
   </gazebo>
-  <!-- LinkRightFinger -->
-  <gazebo reference="panda_rightfinger_l">
+  <!-- LinkLeftFinger -->
+  <gazebo reference="panda_hand_l_finger_l">
     <material>Gazebo/Grey</material>
     <mu1>0.2</mu1>
     <mu2>0.2</mu2>
   </gazebo>
-  <!-- LinkLeftFinger -->
-  <gazebo reference="panda_leftfinger_l">
+  <!-- LinkRightFinger -->
+  <gazebo reference="panda_hand_l_finger_r">
     <material>Gazebo/Grey</material>
     <mu1>0.2</mu1>
     <mu2>0.2</mu2>
@@ -957,22 +957,22 @@
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
-  <transmission name="panda_leftfinger_l">
+  <transmission name="panda_hand_l_finger_l">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="panda_finger_joint1_l">
+    <joint name="panda_hand_l_finger_l_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="panda_finger_joint1_l">
+    <actuator name="panda_hand_l_finger_l_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
-  <transmission name="panda_rightfinger_l">
+  <transmission name="panda_hand_l_finger_r">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="panda_finger_joint2_l">
+    <joint name="panda_hand_l_finger_r_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
-    <actuator name="panda_finger_joint2_l">
+    <actuator name="panda_hand_l_finger_r_joint">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
