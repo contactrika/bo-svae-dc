@@ -298,7 +298,7 @@ class WaypointsMinJerkPolicy(WaypointsPosPolicy):
         if t+1<self.t_max: traj[t+1:,:] = traj[t,:]  # set rest to last entry
         return traj, traj[:,0:3], ee_quat_traj
 
-    def get_action(self, obs, t=None):
+    def get_action(self, obs, t=None, left=False):
         if t is None: assert(False)  # specify t for time-varying policy
         assert(t>=0)  # but t>self.t_max ok, will just return last ctrl
         if t >= self.t_max: t = self.t_max-1
@@ -315,7 +315,7 @@ class WaypointsMinJerkPolicy(WaypointsPosPolicy):
         curr_ee_orient = quaternion_to_euler(curr_ee_quat)
         des_ee_torque = (1.0*(des_ee_orient - curr_ee_orient) -
                          0.1*curr_ee_angvel)
-        J_lin, J_ang = self.robot.get_ee_jacobian()
+        J_lin, J_ang = self.robot.get_ee_jacobian(left=left)
         jacobian = np.vstack([J_lin, J_ang])
         torque = np.matmul(jacobian.transpose(),
                            np.hstack([des_ee_force, des_ee_torque]))

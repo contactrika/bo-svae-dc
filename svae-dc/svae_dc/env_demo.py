@@ -42,11 +42,11 @@ def show_waypts(env, policy, tgt_viz_ids):
 
 def play(env, policy, num_episodes, num_randomized=0,
          scaled_policy_params=None, rnd_params=None,
-         resample_policy_params=True):
+         resample_policy_params=True, do_viz=True):
     if scaled_policy_params is not None:
         assert(rnd_params is None or len(rnd_params)==0 or
                len(scaled_policy_params)==len(rnd_params))
-    do_viz = ('Viz' in env.spec.id and
+    do_viz = (do_viz and 'Viz' in env.spec.id and
               env.spec.id.startswith(('Yumi', 'Franka', 'Sawyer')) and
               hasattr(policy, 'controller') and
               hasattr(policy.controller, 'waypts'))

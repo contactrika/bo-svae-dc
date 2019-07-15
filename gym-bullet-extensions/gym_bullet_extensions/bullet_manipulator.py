@@ -509,10 +509,12 @@ class BulletManipulator:
         self.sim.stepSimulation()
         self.obey_joint_limits()
 
-    def get_ee_jacobian(self):
+    def get_ee_jacobian(self, left=False):
         qpos = self.get_qpos(); qvel = self.get_qvel()
+        ee_link_id = self.info.ee_link_id
+        if left: ee_link_id = self.info.left_ee_link_id
         J_lin, J_ang = self.sim.calculateJacobian(
-            bodyUniqueId=self.info.robot_id, linkIndex=self.info.ee_link_id,
+            bodyUniqueId=self.info.robot_id, linkIndex=ee_link_id,
             localPosition=[0, 0, 0],
             objPositions=qpos.tolist(), objVelocities=qvel.tolist(),
             objAccelerations=[0]*self.info.dof)
