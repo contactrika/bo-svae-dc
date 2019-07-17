@@ -68,13 +68,15 @@ class BulletManipulator:
                  left_fing_link_prefix=None, left_joint_suffix=None,
                  left_rest_arm_qpos=None,
                  dt=1.0/240.0, kp=1.0, kd=0.1, min_z=0.0,
-                 visualize=False, debug_level=0):
+                 visualize=False, cam_dist=1.5, cam_yaw=25, cam_pitch=-35,
+                 debug_level=0):
         assert(control_mode in
                ('ee_position', 'position', 'velocity', 'torque'))
         self.control_mode = control_mode
         self.dt = dt; self.kp = kp; self.kd = kd; self.min_z = min_z
         self.debug_level = debug_level
-        self.visualize = visualize
+        self.visualize = visualize; self.cam_dist = cam_dist
+        self.cam_yaw = cam_yaw; self.cam_pitch = cam_pitch
         # Create and connect bullet simulation client.
         if visualize:
             self.sim = bclient.BulletClient(connection_mode=pybullet.GUI)
@@ -94,7 +96,7 @@ class BulletManipulator:
             connection_mode=pybullet.DIRECT)
         # Load ground.
         self.sim.setAdditionalSearchPath(pybullet_data.getDataPath())
-        self.planeId = self.sim.loadURDF("plane.urdf",[0,0,0])
+        self.plane_id = self.sim.loadURDF("plane.urdf",[0,0,0])
         self._aux_sim.setAdditionalSearchPath(pybullet_data.getDataPath())
         self._aux_sim.loadURDF("plane.urdf", [0, 0, 0])
         # Load robot from URDF.
@@ -212,11 +214,11 @@ class BulletManipulator:
             self.info.robot_id, self.info.joint_ids.tolist(),
             pybullet.TORQUE_CONTROL, forces=[0]*self.info.dof)
 
-    def refresh_viz(self, cameraDistance=1.5, cameraYaw=25, cameraPitch=-35):
+    def refresh_viz(self):
         time.sleep(0.1)
         self.sim.resetDebugVisualizerCamera(
-            cameraDistance=cameraDistance, cameraYaw=cameraYaw,
-            cameraPitch=cameraPitch, cameraTargetPosition=[0.5, 0, 0])
+            cameraDistance=self.cam_dist, cameraYaw=self.cam_yaw,
+            cameraPitch=self.cam_pitch, cameraTargetPosition=[0.5, 0, 0])
 
     def load_objects_from_file(self, objects_file, object_poses, object_quats):
         # Subclasses can call this method to load custom obstacles.
@@ -549,8 +551,8 @@ class BulletManipulator:
 
     def render_debug(self, width=600):
         view_matrix = pybullet.computeViewMatrixFromYawPitchRoll(
-            cameraTargetPosition=[0.5, 0, 0], distance=1.5,
-            yaw=25, pitch=-35, roll=0, upAxisIndex=2)
+            cameraTargetPosition=[0.5, 0, 0], distance=self.cam_dist,
+            yaw=self.cam_yaw, pitch=self.cam_pitch, roll=0, upAxisIndex=2)
         height = width
         #view_matrix = pybullet.computeViewMatrixFromYawPitchRoll(
         #    cameraTargetPosition=base_pos, distance=cam_dist,
@@ -630,7 +632,7 @@ class BulletManipulator:
         for pt in pts:
             body_bullet_ids = [pt[1], pt[2]]  # getContactPoints() docs p.43
             if ((self.info.robot_id in body_bullet_ids) and
-                (self.planeId in body_bullet_ids)):
+                (self.plane_id in body_bullet_ids)):
                 if body_bullet_ids[0] == self.info.robot_id:
                     rbt_link = pt[3]
                 else:
