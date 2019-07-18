@@ -69,7 +69,7 @@ class BulletManipulator:
                  left_rest_arm_qpos=None,
                  dt=1.0/240.0, kp=1.0, kd=0.1, min_z=0.0,
                  visualize=False, cam_dist=1.5, cam_yaw=25, cam_pitch=-35,
-                 debug_level=0):
+                 cam_target=(0.5, 0, 0), debug_level=0):
         assert(control_mode in
                ('ee_position', 'position', 'velocity', 'torque'))
         self.control_mode = control_mode
@@ -77,6 +77,7 @@ class BulletManipulator:
         self.debug_level = debug_level
         self.visualize = visualize; self.cam_dist = cam_dist
         self.cam_yaw = cam_yaw; self.cam_pitch = cam_pitch
+        self.cam_target = list(cam_target)
         # Create and connect bullet simulation client.
         if visualize:
             self.sim = bclient.BulletClient(connection_mode=pybullet.GUI)
@@ -551,12 +552,9 @@ class BulletManipulator:
 
     def render_debug(self, width=600):
         view_matrix = pybullet.computeViewMatrixFromYawPitchRoll(
-            cameraTargetPosition=[0.5, 0, 0], distance=self.cam_dist,
+            cameraTargetPosition=self.cam_target, distance=self.cam_dist,
             yaw=self.cam_yaw, pitch=self.cam_pitch, roll=0, upAxisIndex=2)
         height = width
-        #view_matrix = pybullet.computeViewMatrixFromYawPitchRoll(
-        #    cameraTargetPosition=base_pos, distance=cam_dist,
-        #    yaw=cam_yaw, pitch=cam_pitch, roll=0, upAxisIndex=2)
         proj_matrix = self.sim.computeProjectionMatrixFOV(
             fov=90, aspect=float(width)/height, nearVal=0.01, farVal=100.0)
         w, h, rgba_px, depth_px, segment_mask = self.sim.getCameraImage(
