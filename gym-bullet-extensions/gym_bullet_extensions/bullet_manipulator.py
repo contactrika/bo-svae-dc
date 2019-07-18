@@ -219,7 +219,7 @@ class BulletManipulator:
         time.sleep(0.1)
         self.sim.resetDebugVisualizerCamera(
             cameraDistance=self.cam_dist, cameraYaw=self.cam_yaw,
-            cameraPitch=self.cam_pitch, cameraTargetPosition=[0.5, 0, 0])
+            cameraPitch=self.cam_pitch, cameraTargetPosition=self.cam_target)
 
     def load_objects_from_file(self, objects_file, object_poses, object_quats):
         # Subclasses can call this method to load custom obstacles.
