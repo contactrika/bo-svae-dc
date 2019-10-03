@@ -10,7 +10,7 @@ for env_base in ['Franka', 'Yumi']:
     max_episode_steps = 500 if env_base=='Franka' else 1000
     for ctrl_nm, ctrl_mode in ctrl_modes.items():
         nm_str = env_base+ctrl_nm
-        for num_obj in range(max_num_obj+1):
+        for num_obj in range(1,max_num_obj+1):
             for debug_level in [0, 1, 2]:
                 suffix = ''
                 if debug_level>0:
