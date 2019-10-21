@@ -309,11 +309,19 @@ class BulletManipulator:
 
     def _ee_pos_to_qpos_raw(self, ee_pos, ee_quat=None, fing_dist=0.0,
                             left_ee_pos=None, left_ee_quat=None,
-                            left_fing_dist=0.0):
-        qpos = np.array(pybullet.calculateInverseKinematics(
-            self.info.robot_id, self.info.ee_link_id, ee_pos.tolist(),
-            None if ee_quat is None else ee_quat.tolist(),
-            maxNumIterations=1000, residualThreshold=0.0001))
+                            left_fing_dist=0.0, debug=False):
+        ee_ori = None if ee_quat is None else ee_quat.tolist()
+        qpos = pybullet.calculateInverseKinematics(
+            self.info.robot_id, self.info.ee_link_id,
+            targetPosition=ee_pos.tolist(), targetOrientation=ee_ori,
+            lowerLimits=self.info.joint_minpos.tolist(),
+            upperLimits=self.info.joint_maxpos.tolist(),
+            jointRanges=(self.info.joint_maxpos-self.info.joint_minpos).tolist(),
+            restPoses=self.rest_qpos.tolist(),
+            #solver=pybullet.IK_SDLS,
+            maxNumIterations=1000, residualThreshold=0.0001)
+        qpos = np.array(qpos)
+        if debug: print('_ee_pos_to_qpos_raw() qpos from IK', qpos)
         for jid in self.info.finger_jids_lst:
             qpos[jid] = np.clip(  # finger info (not set by IK)
                 fing_dist/2.0, self.info.joint_minpos[jid],
@@ -327,7 +335,7 @@ class BulletManipulator:
                     None if left_ee_quat is None else left_ee_quat.tolist(),
                     maxNumIterations=1000, residualThreshold=0.0001))
             else:
-                left_qpos = self.rest_qpos
+                left_qpos = self.get_qpos()
             qpos[self.info.left_arm_jids_lst] = \
                 left_qpos[self.info.left_arm_jids_lst]
         for jid in self.info.left_finger_jids_lst:
@@ -609,7 +617,7 @@ class BulletManipulator:
                        debug=False):
         qpos = self._ee_pos_to_qpos_raw(
             ee_pos, ee_quat, fing_dist,
-            left_ee_pos, left_ee_quat, left_fing_dist)
+            left_ee_pos, left_ee_quat, left_fing_dist, debug=debug)
         ok = self.collisions_ok(qpos)
         if not ok and debug:
             print('ee_pos not ok', ee_pos, ee_quat, fing_dist)

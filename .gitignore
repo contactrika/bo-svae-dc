@@ -1,4 +1,9 @@
-ENV/
+*ENV/
 .idea/
 */*.egg-info/
-
+*/__pycache__/
+*/*/__pycache__/
+*/*/*/__pycache__/
+*/.DS_Store
+*/*/.DS_Store
+*/*/*/.DS_Store

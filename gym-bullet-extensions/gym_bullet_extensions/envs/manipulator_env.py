@@ -33,9 +33,6 @@ class ManipulatorEnv(gym.Env):
 
     def __init__(self, robot, num_objects, table_minmax_x_minmax_y, object_urdf,
                  max_episode_steps=300, visualize=False, debug_level=0):
-        if num_objects<=0:
-            print('BulletManipulator expects num_objects>0')
-            assert(num_objects>0)  # BulletManipulator expects num_objects
         self.pos_only_state = True  # don't include velocities in state
         super(ManipulatorEnv, self).__init__()
         self.robot = robot
