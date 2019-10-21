@@ -109,8 +109,8 @@ def test_yumi():
 
 
 def main():
-    test_yumi()
     test_franka()
+    test_yumi()
 
 
 if __name__ == "__main__":
