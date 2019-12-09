@@ -69,7 +69,7 @@ class BulletManipulator:
                  left_rest_arm_qpos=None,
                  dt=1.0/240.0, kp=1.0, kd=0.1, min_z=0.0,
                  visualize=False, cam_dist=1.5, cam_yaw=25, cam_pitch=-35,
-                 cam_target=(0.5, 0, 0), default_ground=True, debug_level=0):
+                 cam_target=(0.5, 0, 0), default_ground=False, debug_level=0):
         assert(control_mode in
                ('ee_position', 'position', 'velocity', 'torque'))
         self.control_mode = control_mode
@@ -103,7 +103,7 @@ class BulletManipulator:
             self._aux_sim.setAdditionalSearchPath(pybullet_data.getDataPath())
             ground_file = "plane.urdf"
         else:
-            ground_file = os.path.join(data_path, "plane_white.urdf")
+            ground_file = os.path.join(data_path, "plane_blue.urdf")
         self.plane_id = self.sim.loadURDF(ground_file,[0,0,0])
         self._aux_sim.loadURDF(ground_file, [0,0,0])
         # Note: changing ground color doesn't work even for plane_transparent.urdf
