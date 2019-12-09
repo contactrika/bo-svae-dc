@@ -69,7 +69,7 @@ class BulletManipulator:
                  left_rest_arm_qpos=None,
                  dt=1.0/240.0, kp=1.0, kd=0.1, min_z=0.0,
                  visualize=False, cam_dist=1.5, cam_yaw=25, cam_pitch=-35,
-                 cam_target=(0.5, 0, 0), debug_level=0):
+                 cam_target=(0.5, 0, 0), default_ground=True, debug_level=0):
         assert(control_mode in
                ('ee_position', 'position', 'velocity', 'torque'))
         self.control_mode = control_mode
@@ -97,9 +97,15 @@ class BulletManipulator:
             connection_mode=pybullet.DIRECT)
         # Load ground.
         self.sim.setAdditionalSearchPath(pybullet_data.getDataPath())
-        self.plane_id = self.sim.loadURDF("plane.urdf",[0,0,0])
         self._aux_sim.setAdditionalSearchPath(pybullet_data.getDataPath())
-        self._aux_sim.loadURDF("plane.urdf", [0, 0, 0])
+        if default_ground:
+            self.plane_id = self.sim.loadURDF("plane.urdf",[0,0,0])
+            self._aux_sim.loadURDF("plane.urdf", [0,0,0])
+        else:
+            ground_file = os.path.join(pybullet_data.getDataPath(), "stadium.sdf")
+            self.plaine_id = self.sim.loadSDF(ground_file)
+            self._aux_sim.loadSDF(ground_file)
+        self._aux_sim.setAdditionalSearchPath(pybullet_data.getDataPath())
         # Load robot from URDF.
         if not os.path.isabs(robot_desc_file):
             robot_description_folder = os.path.split(__file__)[0]
