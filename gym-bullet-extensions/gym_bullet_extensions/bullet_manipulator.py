@@ -95,21 +95,22 @@ class BulletManipulator:
             self.sim = bclient.BulletClient(connection_mode=pybullet.DIRECT)
         self._aux_sim = bclient.BulletClient(
             connection_mode=pybullet.DIRECT)
+        robot_description_folder = os.path.split(__file__)[0]
+        data_path = os.path.join(robot_description_folder, 'data')
         # Load ground.
-        self.sim.setAdditionalSearchPath(pybullet_data.getDataPath())
-        self._aux_sim.setAdditionalSearchPath(pybullet_data.getDataPath())
         if default_ground:
-            self.plane_id = self.sim.loadURDF("plane.urdf",[0,0,0])
-            self._aux_sim.loadURDF("plane.urdf", [0,0,0])
+            self.sim.setAdditionalSearchPath(pybullet_data.getDataPath())
+            self._aux_sim.setAdditionalSearchPath(pybullet_data.getDataPath())
+            ground_file = "plane.urdf"
         else:
-            ground_file = os.path.join(pybullet_data.getDataPath(), "stadium.sdf")
-            self.plaine_id = self.sim.loadSDF(ground_file)
-            self._aux_sim.loadSDF(ground_file)
-        self._aux_sim.setAdditionalSearchPath(pybullet_data.getDataPath())
+            ground_file = os.path.join(data_path, "plane_white.urdf")
+        self.plane_id = self.sim.loadURDF(ground_file,[0,0,0])
+        self._aux_sim.loadURDF(ground_file, [0,0,0])
+        # Note: changing ground color doesn't work even for plane_transparent.urdf
+        # pybullet.changeVisualShape(self.plane_id, -1, rgbaColor=[1, 1, 1, 1])
+        #
         # Load robot from URDF.
         if not os.path.isabs(robot_desc_file):
-            robot_description_folder = os.path.split(__file__)[0]
-            data_path = os.path.join(robot_description_folder, 'data')
             robot_desc_file = os.path.join(data_path, robot_desc_file)
         self.info = self.load_robot(
             robot_desc_file, ee_joint_name, ee_link_name,
