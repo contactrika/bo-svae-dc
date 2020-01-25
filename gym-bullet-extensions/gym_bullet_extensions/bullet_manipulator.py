@@ -228,7 +228,8 @@ class BulletManipulator:
             cameraDistance=self.cam_dist, cameraYaw=self.cam_yaw,
             cameraPitch=self.cam_pitch, cameraTargetPosition=self.cam_target)
 
-    def load_objects_from_file(self, objects_file, object_poses, object_quats):
+    def load_objects_from_file(self, objects_file, object_poses, object_quats,
+                               object_masses=None, object_scales=None):
         # Subclasses can call this method to load custom obstacles.
         robot_description_folder = os.path.split(__file__)[0]
         data_path = os.path.join(robot_description_folder, "data")
@@ -250,6 +251,19 @@ class BulletManipulator:
                     obj_id = self.sim.loadMJCF(fnm)[0]
                 self.sim.resetBasePositionAndOrientation(
                     obj_id, object_poses[i], object_quats[i])
+            elif fnm.endswith('.obj'):
+                obj_mass = 1.0 if object_masses is None else object_masses[i]
+                obj_scale = 1.0 if object_scales is None else object_scales[i]
+                viz_shape_id = self.sim.createVisualShape(
+                    shapeType=pybullet.GEOM_MESH, rgbaColor=None,
+                    fileName=fnm, meshScale=1.0)
+                col_shape_id = self.sim.createCollisionShape(
+                    shapeType=pybullet.GEOM_MESH, fileName=fnm, meshScale=1.0)
+                obj_id = self.sim.createMultiBody(
+                    baseMass=obj_mass, basePosition=object_poses[i],
+                    baseCollisionShapeIndex=col_shape_id,
+                    baseVisualShapeIndex=viz_shape_id,
+                    baseOrientation=object_quats[i])
             else:
                 print('Unknown objects_file format', fnm)
                 assert(False)  # unknown objects_file format
@@ -496,10 +510,19 @@ class BulletManipulator:
             des_ee_pos = action[0:3]
             des_ee_quat = action[3:7]
             assert(np.isclose(np.linalg.norm(des_ee_quat), 1.0))  # invalid quat
-            des_ee_fing_dist = action[7]
-            self.move_to_ee_pos(des_ee_pos, des_ee_quat,
-                                fing_dist=des_ee_fing_dist,
-                                mode=pybullet.POSITION_CONTROL)
+            des_fing_dist = action[7]
+            des_left_ee_pos = None; des_left_ee_quat = None;
+            des_left_fing_dist = None
+            if action.shape[0] > 8:
+                ofst = 8;
+                des_left_ee_pos = action[ofst:ofst+3]
+                des_left_ee_quat = action[ofst+3:ofst+3+7]
+                des_left_fing_dist = action[ofst+7]
+            self.move_to_ee_pos(
+                des_ee_pos, des_ee_quat, fing_dist=des_fing_dist,
+                left_ee_pos=des_left_ee_pos, left_ee_quat=des_left_ee_quat,
+                left_fing_dist=des_left_fing_dist,
+                mode=pybullet.POSITION_CONTROL)
         elif self.control_mode == 'position':
             print('qpos', action, 'kp', self.kp, 'kd', self.kd)
             self.move_to_qpos(action, mode=pybullet.POSITION_CONTROL,
