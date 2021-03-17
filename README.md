@@ -1,5 +1,13 @@
 ## Bayesian Optimization in Variational Latent Spaces with Dynamic Compression (BO-SVAE-DC)
 
+
+<p>R. Antonova *, A. Rai *, T. Li, D. Kragic. <a href="http://proceedings.mlr.press/v100/antonova20a.html">Bayesian Optimization in Variational Latent Spaces with Dynamic Compression</a>. Conference on Robot Learning (CoRL), 2019. [<a href="http://arxiv.org/abs/1907.04796">arXiv</a>]&nbsp;</p>
+
+CoRL2019 Talk           |  CoRL2019 Experiments Video
+:-------------------------:|:-------------------------:
+[![BO-SVAE-DC CoRL2019 Talk](img/corl2019_talk_start.png)](https://www.youtube.com/watch?v=QaCuEv_7lfs&start=29698)  |  [![BO-SVAE-DC Experiments](https://img.youtube.com/vi/2SvdwGZNrvY/0.jpg)](https://www.youtube.com/watch?v=2SvdwGZNrvY)
+
+
 ### Installation
 
 Set up virtualenv:
@@ -140,23 +148,6 @@ You should see a policy that successfully pushes one of the blocks across the ta
 <hr />
 <hr />
 
-## Bibtex
-
-If you find this code useful in your research and would like to include a citation, below is a bibtex entry:
-```
-@inproceedings{pmlr-v100-antonova19a,
-author = {Rika Antonova and Akshara Rai and Tianyu Li and Danica Kragic},
-title = {Bayesian Optimization in Variational Latent Spaces with Dynamic Compression},
-booktitle = {Proceedings of The 3rd Conference on Robot Learning (CoRL)},
-year = {2019},
-volume = {100},
-publisher = {PMLR},
-series = {Proceedings of Machine Learning Research},
-}
-```
-<hr />
-<hr />
-
 ## Notes
 
 ### Installation Notes
@@ -236,3 +227,22 @@ In the future we could let users specify good/bad in a more visual way during da
 BoTorch code from Facebook AI is still experimental and rapidly developing. You will notice comments about it in the code. If you are running on a GPU with a limited memory: reduce the number of internal samples used during BO optimization: see ```svae-dc/svae_dc/utuils/bo_constants.py```
 
 <hr />
+
+
+## Bibtex
+
+If you find this code useful in your research and would like to include a citation, below is a bibtex entry:
+```
+@inproceedings{pmlr-v100-antonova19a,
+author = {Rika Antonova and Akshara Rai and Tianyu Li and Danica Kragic},
+title = {Bayesian Optimization in Variational Latent Spaces with Dynamic Compression},
+booktitle = {Proceedings of The 3rd Conference on Robot Learning (CoRL)},
+year = {2019},
+volume = {100},
+publisher = {PMLR},
+series = {Proceedings of Machine Learning Research},
+}
+```
+<hr />
+<hr />
+
